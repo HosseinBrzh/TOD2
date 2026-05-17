@@ -16,7 +16,19 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'DM Sans'
   background-size: cover; background-position: center;
   z-index: 0;
 }
-#bg-overlay { position: fixed; inset: 0; background: rgba(10,15,25,0.30); z-index: 1; }
+
+/* Blue-white blur overlay (visible from step 1+) */
+#bg-overlay {
+  position: fixed; inset: 0;
+  background: rgba(220, 232, 248, 0.45);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.90s ease;
+  pointer-events: none;
+}
+#bg-overlay.active { opacity: 1; }
+
 
 /* Stage */
 #stage-outer {
@@ -76,7 +88,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'DM Sans'
 #card-title {
   width: 648px; height: 312px;
   left: 176px; top: 164px;
-  background: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.45);
   backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
   border: 0.5px solid rgba(255,255,255,0.60);
   padding: 40px 48px;
@@ -104,7 +116,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'DM Sans'
   transition: font-size 0.90s cubic-bezier(0.65,0,0.35,1);
 }
 #card-title .title-main { font-size: 26px; }
-#card-title.state-small .title-main { font-size: 12.5px; }
+#card-title.state-small .title-main { font-size: 15px; }
 
 .title-sub {
   font-size: 13px; color: #444; margin-top: 12px; line-height: 1.55;
@@ -132,7 +144,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'DM Sans'
 */
 .card-sec {
   width: 240px; height: 160px;
-  background: rgba(255,255,255,0.78);
+  background: rgba(255,255,255,0.48);
   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   border: 0.5px solid rgba(255,255,255,0.55);
   padding: 18px 20px;
@@ -143,21 +155,168 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'DM Sans'
 .card-sec.visible { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
 
 .card-label {
-  font-size: 9px; font-weight: 500;
+  font-size: 12px; font-weight: 500;
   text-transform: uppercase; letter-spacing: 0.10em;
-  color: #666; margin-bottom: 8px;
+  color: #555; margin-bottom: 9px;
 }
 .card-title-text {
   font-family: 'DM Serif Display', serif;
-  font-size: 15px; font-weight: 400;
+  font-size: 20px; font-weight: 400;
   color: #111; line-height: 1.35;
 }
-.card-sub { font-size: 10.5px; color: #555; margin-top: 6px; line-height: 1.4; }
+.card-sub { font-size: 13px; color: #444; margin-top: 7px; line-height: 1.4; }
 
 .accent-blue  { border-left: 4px solid #3A7DC9; }
 .accent-green { border-left: 4px solid #3A9B5C; }
 .accent-amber { border-left: 4px solid #C4922A; }
 .accent-teal  { border-left: 4px solid #2A9D8F; }
+
+/* ── Section 1 header state (T1 morphs into wide top-left strip) ── */
+#card-t1.state-header {
+  width: max-content;
+  height: 64px;
+  right: auto;
+  padding: 0 28px 0 20px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 18px;
+  text-align: left;
+  border-left: 5px solid #3A9B5C;
+  white-space: nowrap;
+  pointer-events: none;
+}
+#card-t1.state-header .card-label {
+  font-size: 11px;
+  white-space: nowrap;
+  margin-bottom: 0; flex-shrink: 0;
+  border-right: 1.5px solid #bbb;
+  padding-right: 18px;
+}
+#card-t1.state-header .card-title-text {
+  font-size: 22px;
+  white-space: nowrap;
+}
+
+/* ── Tree cards (step 2) ────────────────────────────────────── */
+.tree-card {
+  background: rgba(255,255,255,0.48);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 0.5px solid rgba(255,255,255,0.55);
+  padding: 14px 18px;
+  width: 200px;
+  text-align: center;
+  opacity: 0;
+  transform: scale(0.88) translateY(8px);
+  z-index: 2;
+  pointer-events: none;
+}
+.tree-card.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+#tc-root {
+  border-top: 4px solid #3A7DC9;
+  width: 280px;
+  left: 360px; top: 105px;
+}
+#tc-root .card-title-text { font-size: 15px; }
+.tree-problem {
+  border-top: 3px solid #C0392B;
+}
+.tree-problem .card-title-text { font-size: 13px; color: #222; }
+#tc-p1, #tc-p2, #tc-p3, #tc-p4, #tc-p5, #tc-p6 {
+  width: 140px; height: 80px;
+  display: flex; align-items: center; justify-content: center;
+  top: 270px;
+}
+#tc-p1 { left: 45px; }
+#tc-p2 { left: 199px; }
+#tc-p3 { left: 353px; }
+#tc-p4 { left: 507px; }
+#tc-p5 { left: 661px; }
+#tc-p6 { left: 815px; }
+#tc-bottom {
+  border-top: 4px solid #8B4513;
+  width: 290px; height: 60px;
+  left: 355px; top: 430px;
+}
+#tc-bottom .card-title-text { font-size: 15px; color: #111; }
+
+/* ── Step 3: hub (centre) state for tc-bottom ───────────────── */
+#tc-bottom.state-hub {
+  border: 3px solid #8B4513;
+  border-radius: 14px;
+  justify-content: center;
+}
+#tc-bottom.state-hub .card-title-text { font-size: 17px; }
+
+/* ── Solution cards (step 3) ────────────────────────────────── */
+.sol-card {
+  background: rgba(255,255,255,0.48);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 0.5px solid rgba(255,255,255,0.55);
+  border-radius: 10px;
+  padding: 10px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 8px;
+  opacity: 0; transform: scale(0.88) translateY(8px);
+  z-index: 2; pointer-events: none;
+}
+.sol-card.visible { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+.sol-img-frame {
+  width: 100%; flex: 1;
+  border-radius: 6px;
+  overflow: hidden;
+  min-height: 0;
+}
+.sol-img-frame img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.sol-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 12.5px; color: #111;
+  text-align: center; line-height: 1.3;
+  flex-shrink: 0;
+}
+#sc-1 { width: 155px; height: 155px; left: 80px;  top: 80px; }
+#sc-2 { width: 155px; height: 155px; left: 765px; top: 80px; }
+#sc-3 { width: 155px; height: 155px; left: 765px; top: 380px; }
+#sc-4 { width: 155px; height: 155px; left: 80px;  top: 380px; }
+#sc-5 { width: 155px; height: 155px; left: 415px; top: 455px; }
+
+/* ── Step 4: big centre image card ─────────────────────────── */
+#card-img-main {
+  width: 640px; height: 430px;
+  left: 180px; top: 100px;
+  background: rgba(255,255,255,0.40);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 0.5px solid rgba(255,255,255,0.60);
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 0;
+  opacity: 0; transform: scale(0.92);
+  z-index: 3; pointer-events: none;
+}
+#card-img-main.visible { opacity: 1; transform: scale(1); pointer-events: auto; }
+#card-img-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ── Step 5: big centre video card ──────────────────────────── */
+#card-video-main {
+  width: 640px; height: 430px;
+  left: 180px; top: 100px;
+  background: #000;
+  border: 0.5px solid rgba(255,255,255,0.60);
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 0;
+  opacity: 0; transform: scale(0.92);
+  z-index: 3; pointer-events: none;
+}
+#card-video-main.visible { opacity: 1; transform: scale(1); pointer-events: auto; }
+#card-video-main video { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* ── Tooltip ───────────────────────────────────────────────── */
 #tooltip {
@@ -175,6 +334,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'DM Sans'
 
 <div id="bg"></div>
 <div id="bg-overlay"></div>
+
 
 <div id="stage-outer">
   <div id="stage">
@@ -216,6 +376,66 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'DM Sans'
          data-detail="What did the typology analysis reveal? Seven distinct station clusters across 129 stations — each with its own profile and a targeted policy package.">
       <div class="card-label">Section 3</div>
       <div class="card-title-text">Case Study Results</div>
+    </div>
+
+    <!-- ── Step 2: Problem tree ─────────────────────────────── -->
+    <div class="card tree-card" id="tc-root">
+      <div class="card-title-text">Contemporary Problems within Cities</div>
+    </div>
+    <div class="card tree-card tree-problem" id="tc-p1">
+      <div class="card-title-text">Affordable Housing</div>
+    </div>
+    <div class="card tree-card tree-problem" id="tc-p2">
+      <div class="card-title-text">Traffic &amp; Gridlock</div>
+    </div>
+    <div class="card tree-card tree-problem" id="tc-p3">
+      <div class="card-title-text">Infrastructure Degradation</div>
+    </div>
+    <div class="card tree-card tree-problem" id="tc-p4">
+      <div class="card-title-text">Urban Sprawl</div>
+    </div>
+    <div class="card tree-card tree-problem" id="tc-p5">
+      <div class="card-title-text">Environmental Pollution</div>
+    </div>
+    <div class="card tree-card tree-problem" id="tc-p6">
+      <div class="card-title-text">Social Inequity</div>
+    </div>
+    <div class="card tree-card" id="tc-bottom">
+      <div class="card-title-text">Car-centric Urbanization</div>
+    </div>
+
+    <!-- Big video card (step 5) -->
+    <div class="card" id="card-video-main">
+      <video id="main-video" autoplay loop muted playsinline>
+        <source src="https://files.catbox.moe/9z0zoj.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- Big image card (step 4) -->
+    <div class="card" id="card-img-main">
+      <img src="https://i.postimg.cc/pVcqJpBb/Car-centric-Development.png" alt="Car-centric Development">
+    </div>
+
+    <!-- Solution cards (step 3) -->
+    <div class="card sol-card" id="sc-1">
+      <div class="sol-img-frame"><img src="https://i.postimg.cc/d0YHXpX1/new-urbanism.png" alt="New Urbanism"></div>
+      <div class="sol-title">New Urbanism</div>
+    </div>
+    <div class="card sol-card" id="sc-2">
+      <div class="sol-img-frame"><img src="https://i.postimg.cc/8c5n4vYq/compact-city.png" alt="Compact City"></div>
+      <div class="sol-title">Compact City</div>
+    </div>
+    <div class="card sol-card" id="sc-3">
+      <div class="sol-img-frame"><img src="https://i.postimg.cc/jdDFJzPb/green-urbanism.png" alt="Green Urbanism"></div>
+      <div class="sol-title">Green Urbanism</div>
+    </div>
+    <div class="card sol-card" id="sc-4">
+      <div class="sol-img-frame"><img src="https://i.postimg.cc/B6ZhZDJb/smart-growth.png" alt="Smart Growth"></div>
+      <div class="sol-title">Smart Growth</div>
+    </div>
+    <div class="card sol-card" id="sc-5">
+      <div class="sol-img-frame"><img src="https://i.postimg.cc/d0jHKnPN/pedestrian-pocket.png" alt="Pedestrian Pockets"></div>
+      <div class="sol-title">Pedestrian Pockets</div>
     </div>
 
   </div>
@@ -275,10 +495,49 @@ makeThread('obj-t1',    '#2E8B4A');
 makeThread('obj-t2',    '#B87820');
 makeThread('obj-t3',    '#1A8C80');
 
-posThread('title-obj',  287, 320,  380, 320); // title right edge → obj left edge
-posThread('obj-t1',     620, 320,  713, 110); // obj right → t1 left-mid
-posThread('obj-t2',     620, 320,  713, 320); // obj right → t2 left
-posThread('obj-t3',     620, 320,  713, 530); // obj right → t3 left-mid
+posThread('title-obj',  287, 320,  380, 320);
+posThread('obj-t1',     620, 320,  713, 110);
+posThread('obj-t2',     620, 320,  713, 320);
+posThread('obj-t3',     620, 320,  713, 530);
+
+// Tree threads
+// Card centres:
+// root:   left=360, w=280 → cx=500;  top=105, h≈58  → bottom=163
+// p1: left=50,  w=175 → cx=137;  top=250, h≈50 → cy=275
+// p2: left=265, w=175 → cx=352;  top=250           → cy=275
+// p3: left=480, w=175 → cx=567;  top=250           → cy=275
+// p4: left=50,  w=175 → cx=137;  top=380           → cy=405
+// p5: left=265, w=175 → cx=352;  top=380           → cy=405
+// p6: left=480, w=175 → cx=567;  top=380           → cy=405
+// bottom: left=355, w=290 → cx=500; top=510        → top=510
+
+makeThread('r-p1', '#888'); makeThread('r-p2', '#888'); makeThread('r-p3', '#888');
+makeThread('r-p4', '#888'); makeThread('r-p5', '#888'); makeThread('r-p6', '#888');
+makeThread('p1-b', '#8B4513'); makeThread('p2-b', '#8B4513'); makeThread('p3-b', '#8B4513');
+makeThread('p4-b', '#8B4513'); makeThread('p5-b', '#8B4513'); makeThread('p6-b', '#8B4513');
+
+posThread('r-p1', 500, 163, 115, 270);
+posThread('r-p2', 500, 163, 269, 270);
+posThread('r-p3', 500, 163, 423, 270);
+posThread('r-p4', 500, 163, 577, 270);
+posThread('r-p5', 500, 163, 731, 270);
+posThread('r-p6', 500, 163, 885, 270);
+
+posThread('p1-b', 115, 350, 500, 430);
+posThread('p2-b', 269, 350, 500, 430);
+posThread('p3-b', 423, 350, 500, 430);
+posThread('p4-b', 577, 350, 500, 430);
+posThread('p5-b', 731, 350, 500, 430);
+posThread('p6-b', 885, 350, 500, 430);
+
+// Sol threads (step 3) — hub centre (499,319) → each sol card centre
+makeThread('sol-1','#8B4513'); makeThread('sol-2','#8B4513'); makeThread('sol-3','#8B4513');
+makeThread('sol-4','#8B4513'); makeThread('sol-5','#8B4513');
+posThread('sol-1', 499, 319, 157, 157);
+posThread('sol-2', 499, 319, 842, 157);
+posThread('sol-3', 499, 319, 842, 457);
+posThread('sol-4', 499, 319, 157, 457);
+posThread('sol-5', 499, 319, 492, 532);
 
 /* ── Tooltip ──────────────────────────────────────────────── */
 const tip = document.getElementById('tooltip');
@@ -301,54 +560,194 @@ function moveTip(ev) {
 }
 
 /* ── Step machine ─────────────────────────────────────────── */
+const bgOverlay = document.getElementById('bg-overlay');
 const cardTitle = document.getElementById('card-title');
 const cardObj   = document.getElementById('card-obj');
 const cardT1    = document.getElementById('card-t1');
 const cardT2    = document.getElementById('card-t2');
 const cardT3    = document.getElementById('card-t3');
-const TOTAL = 2;
+const tcBottom  = document.getElementById('tc-bottom');
+
+const treeCards = ['tc-root','tc-p1','tc-p2','tc-p3','tc-p4','tc-p5','tc-p6','tc-bottom']
+  .map(id => document.getElementById(id));
+const treeThreads = ['r-p1','r-p2','r-p3','r-p4','r-p5','r-p6','p1-b','p2-b','p3-b','p4-b','p5-b','p6-b'];
+
+const solCards = ['sc-1','sc-2','sc-3','sc-4','sc-5'].map(id => document.getElementById(id));
+const solThreadNames = ['sol-1','sol-2','sol-3','sol-4','sol-5'];
+const cardImgMain   = document.getElementById('card-img-main');
+const cardVideoMain = document.getElementById('card-video-main');
+const mainVideo     = document.getElementById('main-video');
+
+function hideTree() {
+  treeCards.forEach(c => c.classList.remove('visible'));
+  treeThreads.forEach(hideThread);
+}
+function hideSol() {
+  solCards.forEach(c => c.classList.remove('visible'));
+  solThreadNames.forEach(hideThread);
+}
+
+const TOTAL = 6;
 let step = 0;
 
 function applyStep(s) {
+  const prevStep = step;
   step = Math.max(0, Math.min(TOTAL, s));
   document.getElementById('step-info').textContent = `Step ${step} of ${TOTAL}`;
+  bgOverlay.classList.toggle('active', step > 0);
 
   if (step === 0) {
-    // Big centred title only
     cardTitle.classList.remove('state-small');
     setTimeout(() => cardTitle.classList.add('state-center'), 60);
     cardObj.classList.remove('visible');
-    cardT1.classList.remove('visible');
+    cardT1.classList.remove('visible', 'state-header');
+    cardT1.style.left = '713px'; cardT1.style.top = '30px';
+    cardT1.style.width = '240px'; cardT1.style.height = '160px';
     cardT2.classList.remove('visible');
     cardT3.classList.remove('visible');
     ['title-obj','obj-t1','obj-t2','obj-t3'].forEach(hideThread);
+    hideTree();
+    hideSol();
+    cardImgMain.classList.remove('visible');
+    cardVideoMain.classList.remove('visible');
+    mainVideo.pause();
+    tcBottom.classList.remove('state-hub');
+    tcBottom.style.left = ''; tcBottom.style.top = '';
+    tcBottom.style.width = ''; tcBottom.style.height = '';
   }
 
   if (step === 1) {
-    // Title shrinks to left column centre, objectives appears centre, 3 topics appear right
+    cardT1.classList.remove('state-header');
+    cardT1.style.left = '713px'; cardT1.style.top = '30px';
+    cardT1.style.width = '240px'; cardT1.style.height = '160px';
     cardTitle.classList.remove('state-center');
     cardTitle.classList.add('state-small');
+    cardTitle.style.opacity = '1';
+    cardObj.style.opacity = '1';
+    cardT2.style.pointerEvents = '';
+    cardT3.style.pointerEvents = '';
+    hideTree();
+    hideSol();
+    tcBottom.classList.remove('state-hub');
+    tcBottom.style.left = ''; tcBottom.style.top = '';
+    tcBottom.style.width = ''; tcBottom.style.height = '';
+    cardImgMain.classList.remove('visible');
 
-    // Objectives appears after title has moved
-    setTimeout(() => {
-      cardObj.classList.add('visible');
-      showThread('title-obj');
-    }, 550);
+    if (prevStep < step || !cardObj.classList.contains('visible')) {
+      cardObj.classList.remove('visible');
+      cardT1.classList.remove('visible');
+      cardT2.classList.remove('visible');
+      cardT3.classList.remove('visible');
+      ['title-obj','obj-t1','obj-t2','obj-t3'].forEach(hideThread);
 
-    // All 3 topic cards appear together shortly after
-    setTimeout(() => {
-      cardT1.classList.add('visible');
-      cardT2.classList.add('visible');
-      cardT3.classList.add('visible');
-    }, 800);
-    setTimeout(() => {
-      showThread('obj-t1');
-      showThread('obj-t2');
-      showThread('obj-t3');
-    }, 1050);
+      setTimeout(() => { cardObj.classList.add('visible'); showThread('title-obj'); }, 550);
+      setTimeout(() => {
+        cardT1.classList.add('visible');
+        cardT2.classList.add('visible');
+        cardT3.classList.add('visible');
+      }, 800);
+      setTimeout(() => {
+        showThread('obj-t1'); showThread('obj-t2'); showThread('obj-t3');
+      }, 1050);
+    } else {
+      const delay = prevStep > step ? 700 : 0;
+      setTimeout(() => {
+        cardObj.classList.add('visible');
+        cardT1.classList.add('visible');
+        cardT2.classList.add('visible');
+        cardT3.classList.add('visible');
+        ['title-obj','obj-t1','obj-t2','obj-t3'].forEach(showThread);
+      }, delay);
+    }
   }
 
-  if (step === 0 && s < 0) { /* already at 0, do nothing */ }
+  if (step === 2) {
+    cardTitle.style.opacity = '0';
+    cardObj.style.opacity = '0';
+    cardT2.classList.remove('visible');
+    cardT2.style.pointerEvents = 'none';
+    cardT3.classList.remove('visible');
+    cardT3.style.pointerEvents = 'none';
+    ['title-obj','obj-t1','obj-t2','obj-t3'].forEach(hideThread);
+
+    if (prevStep === 3) {
+      // Back from step 3: animate tc-bottom back to tree position, restore tree
+      hideSol();
+      tcBottom.classList.remove('state-hub');
+      tcBottom.style.left = '355px'; tcBottom.style.top = '430px';
+      tcBottom.style.width = '290px'; tcBottom.style.height = '60px';
+      setTimeout(() => {
+        treeCards.forEach(c => c.classList.add('visible'));
+        treeThreads.forEach(showThread);
+      }, 500);
+    } else {
+      // Forward from step 1: animate T1 to header, reveal tree
+      tcBottom.style.left = ''; tcBottom.style.top = '';
+      tcBottom.style.width = ''; tcBottom.style.height = '';
+
+      setTimeout(() => {
+        cardT1.classList.add('state-header');
+        cardT1.style.visibility = 'hidden';
+        cardT1.style.width = 'max-content';
+        const contentW = cardT1.scrollWidth + 2;
+        cardT1.style.width = '240px';
+        cardT1.classList.remove('state-header');
+        cardT1.style.visibility = '';
+        cardT1.getBoundingClientRect();
+        cardT1.classList.add('state-header');
+        cardT1.style.left   = '6px';
+        cardT1.style.top    = '10px';
+        cardT1.style.height = '64px';
+        cardT1.style.width  = contentW + 'px';
+      }, 400);
+
+      setTimeout(() => { document.getElementById('tc-root').classList.add('visible'); }, 1400);
+      setTimeout(() => { ['r-p1','r-p2','r-p3','r-p4','r-p5','r-p6'].forEach(showThread); }, 1800);
+      setTimeout(() => {
+        ['tc-p1','tc-p2','tc-p3','tc-p4','tc-p5','tc-p6']
+          .forEach(id => document.getElementById(id).classList.add('visible'));
+      }, 2100);
+      setTimeout(() => { ['p1-b','p2-b','p3-b','p4-b','p5-b','p6-b'].forEach(showThread); }, 2600);
+      setTimeout(() => { tcBottom.classList.add('visible'); }, 2900);
+    }
+  }
+
+  if (step === 3) {
+    // Hide root and problem cards, keep tc-bottom visible, move it to centre hub
+    ['tc-root','tc-p1','tc-p2','tc-p3','tc-p4','tc-p5','tc-p6']
+      .forEach(id => document.getElementById(id).classList.remove('visible'));
+    ['r-p1','r-p2','r-p3','r-p4','r-p5','r-p6',
+     'p1-b','p2-b','p3-b','p4-b','p5-b','p6-b'].forEach(hideThread);
+
+    cardImgMain.classList.remove('visible');
+    tcBottom.classList.add('visible');
+    tcBottom.classList.add('state-hub');
+    tcBottom.style.left = '412px'; tcBottom.style.top  = '232px';
+    tcBottom.style.width = '175px'; tcBottom.style.height = '175px';
+
+    setTimeout(() => { solCards.forEach(c => c.classList.add('visible')); }, 700);
+  }
+
+  if (step === 4) {
+    // Hide sol cards and tc-bottom, keep card-t1 header, show big image card
+    hideSol();
+    tcBottom.classList.remove('visible');
+    cardVideoMain.classList.remove('visible');
+    mainVideo.pause();
+    setTimeout(() => { cardImgMain.classList.add('visible'); }, 300);
+  }
+
+  if (step === 5) {
+    // Swap image card for video card
+    cardImgMain.classList.remove('visible');
+    hideSol();
+    tcBottom.classList.remove('visible');
+    setTimeout(() => {
+      cardVideoMain.classList.add('visible');
+      mainVideo.currentTime = 0;
+      mainVideo.play();
+    }, 300);
+  }
 }
 
 document.getElementById('btn-next').addEventListener('click', () => applyStep(step+1));

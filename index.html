@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beyond Heuristics — TOD Typologies in Milan FUA</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'DM Sans', sans-serif; background: #1a1a1a; }
@@ -318,6 +318,109 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'DM Sans'
 #card-video-main.visible { opacity: 1; transform: scale(1); pointer-events: auto; }
 #card-video-main video { width: 100%; height: 100%; object-fit: cover; display: block; }
 
+
+/* ── Step 5 split: chart card (left) ────────────────────────── */
+#card-chart-left {
+  width: 456px; height: 346px;
+  left: 32px; top: 147px;
+  background: rgba(255,255,255,0.40);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 0.5px solid rgba(255,255,255,0.60);
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 0;
+  opacity: 0; transform: scale(0.92);
+  z-index: 3; pointer-events: none;
+}
+#card-chart-left.visible { opacity: 1; transform: scale(1); pointer-events: auto; }
+#card-chart-left img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+/* ── Step 5: image swap card (right, replaces video after 4s) ── */
+#card-img-right-s5 {
+  width: 456px; height: 346px;
+  left: 512px; top: 147px;
+  background: rgba(255,255,255,0.40);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 0.5px solid rgba(255,255,255,0.60);
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 0;
+  opacity: 0; transform: scale(0.92);
+  z-index: 3; pointer-events: none;
+}
+#card-img-right-s5.visible { opacity: 1; transform: scale(1); pointer-events: auto; }
+#card-img-right-s5 img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+/* ── Step 6: image card (right, replaces video) ─────────────── */
+#card-img-right {
+  width: 456px; height: 346px;
+  left: 512px; top: 147px;
+  background: rgba(255,255,255,0.40);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 0.5px solid rgba(255,255,255,0.60);
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 0;
+  opacity: 0; transform: scale(0.92);
+  z-index: 3; pointer-events: none;
+}
+#card-img-right.visible { opacity: 1; transform: scale(1); pointer-events: auto; }
+#card-img-right img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+/* ── Step 7: Mode Choice Behavior cards ──────────────────── */
+#mc-root {
+  border-top: 4px solid #3A9B5C;
+  width: 260px; height: 90px;
+  left: 370px; top: 275px;
+}
+#mc-root .card-title-text { font-size: 16px; }
+.mc-factor {
+  border-top: 3px solid #3A7DC9;
+  width: 260px; height: 90px;
+  top: 360px;
+}
+.mc-factor .card-title-text { font-size: 13px; }
+#mc-f1 { left: 80px; }
+#mc-f2 { left: 370px; }
+#mc-f3 { left: 660px; }
+
+/* ── Step 8: TOD statement card ─────────────────────────── */
+#card-tod {
+  width: 940px; height: 128px;
+  left: 30px; top: 256px;
+  background: rgba(255,255,255,0.52);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border: 0.5px solid rgba(255,255,255,0.65);
+  border-top: 4px solid #C4922A;
+  border-radius: 12px;
+  overflow: hidden;
+  opacity: 0; transform: scale(0.92);
+  pointer-events: none;
+}
+#card-tod.visible { opacity: 1; transform: scale(1); pointer-events: auto; }
+#card-tod.expanded { height: 150px; top: 245px; }
+#tod-title {
+  position: absolute;
+  left: 28px; right: 28px; top: 41px;
+  font-family: 'DM Serif Display', serif;
+  font-size: 36px; color: #111;
+  text-align: center; line-height: 1.3;
+  transition: top 0.80s cubic-bezier(0.65,0,0.35,1),
+              font-size 0.80s cubic-bezier(0.65,0,0.35,1);
+}
+#tod-sub {
+  position: absolute;
+  left: 28px; right: 28px; top: 84px;
+  font-size: 13px; font-weight: 600;
+  color: #333; line-height: 1.65;
+  white-space: nowrap;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.75s ease 0.45s;
+}
+#card-tod.expanded #tod-title { top: 24px; font-size: 18px; }
+#card-tod.expanded #tod-sub   { opacity: 1; }
+
 /* ── Tooltip ───────────────────────────────────────────────── */
 #tooltip {
   position: fixed;
@@ -411,6 +514,21 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'DM Sans'
       </video>
     </div>
 
+    <!-- Image swap card right — replaces video in step 5 after 4s -->
+    <div class="card" id="card-img-right-s5">
+      <img src="https://i.postimg.cc/Xqbcgjc0/7.png" alt="TOD Image">
+    </div>
+
+    <!-- Image card right — replaces video in step 6 -->
+    <div class="card" id="card-img-right">
+      <img src="https://i.postimg.cc/Y0hgRccp/4.png" alt="TOD Image">
+    </div>
+
+    <!-- Chart card — appears left of video after 5s in step 5 -->
+    <div class="card" id="card-chart-left">
+      <img src="https://i.postimg.cc/Yqfz0RCR/Chart.png" alt="Chart">
+    </div>
+
     <!-- Big image card (step 4) -->
     <div class="card" id="card-img-main">
       <img src="https://i.postimg.cc/pVcqJpBb/Car-centric-Development.png" alt="Car-centric Development">
@@ -436,6 +554,26 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'DM Sans'
     <div class="card sol-card" id="sc-5">
       <div class="sol-img-frame"><img src="https://i.postimg.cc/d0jHKnPN/pedestrian-pocket.png" alt="Pedestrian Pockets"></div>
       <div class="sol-title">Pedestrian Pockets</div>
+    </div>
+
+    <!-- Step 8: TOD statement -->
+    <div class="card" id="card-tod">
+      <div id="tod-title">TOD alone is not enough</div>
+      <div id="tod-sub">Hard Interventions (Pull and Push Interventions) + Soft Interventions (Behavioral and Psychological Strategies)</div>
+    </div>
+
+    <!-- Step 7: Mode Choice Behavior -->
+    <div class="card tree-card" id="mc-root">
+      <div class="card-title-text">Mode Choice Behavior</div>
+    </div>
+    <div class="card tree-card mc-factor" id="mc-f1">
+      <div class="card-title-text">Entrenched Habits and Attitudes</div>
+    </div>
+    <div class="card tree-card mc-factor" id="mc-f2">
+      <div class="card-title-text">Socio-demographic Characteristics</div>
+    </div>
+    <div class="card tree-card mc-factor" id="mc-f3">
+      <div class="card-title-text">Destination Accessibility</div>
     </div>
 
   </div>
@@ -539,6 +677,12 @@ posThread('sol-3', 499, 319, 842, 457);
 posThread('sol-4', 499, 319, 157, 457);
 posThread('sol-5', 499, 319, 492, 532);
 
+// MC threads (step 7) — mc-root bottom-centre (500,240) → each factor top-centre
+makeThread('mc-1','#3A9B5C'); makeThread('mc-2','#3A9B5C'); makeThread('mc-3','#3A9B5C');
+posThread('mc-1', 500, 240, 210, 360);
+posThread('mc-2', 500, 240, 500, 360);
+posThread('mc-3', 500, 240, 790, 360);
+
 /* ── Tooltip ──────────────────────────────────────────────── */
 const tip = document.getElementById('tooltip');
 [document.getElementById('card-t1'),
@@ -560,6 +704,10 @@ function moveTip(ev) {
 }
 
 /* ── Step machine ─────────────────────────────────────────── */
+let pendingTimers = [];
+function later(fn, ms) { pendingTimers.push(setTimeout(fn, ms)); }
+function clearTimers() { pendingTimers.forEach(clearTimeout); pendingTimers = []; }
+
 const bgOverlay = document.getElementById('bg-overlay');
 const cardTitle = document.getElementById('card-title');
 const cardObj   = document.getElementById('card-obj');
@@ -574,9 +722,12 @@ const treeThreads = ['r-p1','r-p2','r-p3','r-p4','r-p5','r-p6','p1-b','p2-b','p3
 
 const solCards = ['sc-1','sc-2','sc-3','sc-4','sc-5'].map(id => document.getElementById(id));
 const solThreadNames = ['sol-1','sol-2','sol-3','sol-4','sol-5'];
-const cardImgMain   = document.getElementById('card-img-main');
-const cardVideoMain = document.getElementById('card-video-main');
-const mainVideo     = document.getElementById('main-video');
+const cardImgMain      = document.getElementById('card-img-main');
+const cardVideoMain    = document.getElementById('card-video-main');
+const cardChartLeft    = document.getElementById('card-chart-left');
+const cardImgRightS5   = document.getElementById('card-img-right-s5');
+const cardImgRight     = document.getElementById('card-img-right');
+const mainVideo        = document.getElementById('main-video');
 
 function hideTree() {
   treeCards.forEach(c => c.classList.remove('visible'));
@@ -587,10 +738,24 @@ function hideSol() {
   solThreadNames.forEach(hideThread);
 }
 
-const TOTAL = 6;
+const mcRoot       = document.getElementById('mc-root');
+const mcFactors    = ['mc-f1','mc-f2','mc-f3'].map(id => document.getElementById(id));
+const mcThreadNames = ['mc-1','mc-2','mc-3'];
+function hideMC() {
+  mcRoot.classList.remove('visible');
+  mcFactors.forEach(c => c.classList.remove('visible'));
+  mcThreadNames.forEach(hideThread);
+  mcRoot.style.top = '275px';
+}
+
+const cardTod = document.getElementById('card-tod');
+function hideTod() { cardTod.classList.remove('visible', 'expanded'); }
+
+const TOTAL = 8;
 let step = 0;
 
 function applyStep(s) {
+  clearTimers();
   const prevStep = step;
   step = Math.max(0, Math.min(TOTAL, s));
   document.getElementById('step-info').textContent = `Step ${step} of ${TOTAL}`;
@@ -598,7 +763,7 @@ function applyStep(s) {
 
   if (step === 0) {
     cardTitle.classList.remove('state-small');
-    setTimeout(() => cardTitle.classList.add('state-center'), 60);
+    later(() => cardTitle.classList.add('state-center'), 60);
     cardObj.classList.remove('visible');
     cardT1.classList.remove('visible', 'state-header');
     cardT1.style.left = '713px'; cardT1.style.top = '30px';
@@ -610,10 +775,16 @@ function applyStep(s) {
     hideSol();
     cardImgMain.classList.remove('visible');
     cardVideoMain.classList.remove('visible');
+    cardChartLeft.classList.remove('visible');
+    cardImgRightS5.classList.remove('visible');
+    cardImgRight.classList.remove('visible');
     mainVideo.pause();
+    cardVideoMain.style.left = ''; cardVideoMain.style.top = ''; cardVideoMain.style.width = ''; cardVideoMain.style.height = '';
     tcBottom.classList.remove('state-hub');
     tcBottom.style.left = ''; tcBottom.style.top = '';
     tcBottom.style.width = ''; tcBottom.style.height = '';
+    hideMC();
+    hideTod();
   }
 
   if (step === 1) {
@@ -640,18 +811,18 @@ function applyStep(s) {
       cardT3.classList.remove('visible');
       ['title-obj','obj-t1','obj-t2','obj-t3'].forEach(hideThread);
 
-      setTimeout(() => { cardObj.classList.add('visible'); showThread('title-obj'); }, 550);
-      setTimeout(() => {
+      later(() => { cardObj.classList.add('visible'); showThread('title-obj'); }, 550);
+      later(() => {
         cardT1.classList.add('visible');
         cardT2.classList.add('visible');
         cardT3.classList.add('visible');
       }, 800);
-      setTimeout(() => {
+      later(() => {
         showThread('obj-t1'); showThread('obj-t2'); showThread('obj-t3');
       }, 1050);
     } else {
       const delay = prevStep > step ? 700 : 0;
-      setTimeout(() => {
+      later(() => {
         cardObj.classList.add('visible');
         cardT1.classList.add('visible');
         cardT2.classList.add('visible');
@@ -669,14 +840,15 @@ function applyStep(s) {
     cardT3.classList.remove('visible');
     cardT3.style.pointerEvents = 'none';
     ['title-obj','obj-t1','obj-t2','obj-t3'].forEach(hideThread);
+    cardImgMain.classList.remove('visible');
 
-    if (prevStep === 3) {
-      // Back from step 3: animate tc-bottom back to tree position, restore tree
+    if (prevStep > step) {
+      // Back from step 3 (image): hide image, restore tree
       hideSol();
       tcBottom.classList.remove('state-hub');
       tcBottom.style.left = '355px'; tcBottom.style.top = '430px';
       tcBottom.style.width = '290px'; tcBottom.style.height = '60px';
-      setTimeout(() => {
+      later(() => {
         treeCards.forEach(c => c.classList.add('visible'));
         treeThreads.forEach(showThread);
       }, 500);
@@ -685,7 +857,7 @@ function applyStep(s) {
       tcBottom.style.left = ''; tcBottom.style.top = '';
       tcBottom.style.width = ''; tcBottom.style.height = '';
 
-      setTimeout(() => {
+      later(() => {
         cardT1.classList.add('state-header');
         cardT1.style.visibility = 'hidden';
         cardT1.style.width = 'max-content';
@@ -701,58 +873,141 @@ function applyStep(s) {
         cardT1.style.width  = contentW + 'px';
       }, 400);
 
-      setTimeout(() => { document.getElementById('tc-root').classList.add('visible'); }, 1400);
-      setTimeout(() => { ['r-p1','r-p2','r-p3','r-p4','r-p5','r-p6'].forEach(showThread); }, 1800);
-      setTimeout(() => {
+      later(() => { document.getElementById('tc-root').classList.add('visible'); }, 1400);
+      later(() => { ['r-p1','r-p2','r-p3','r-p4','r-p5','r-p6'].forEach(showThread); }, 1800);
+      later(() => {
         ['tc-p1','tc-p2','tc-p3','tc-p4','tc-p5','tc-p6']
           .forEach(id => document.getElementById(id).classList.add('visible'));
       }, 2100);
-      setTimeout(() => { ['p1-b','p2-b','p3-b','p4-b','p5-b','p6-b'].forEach(showThread); }, 2600);
-      setTimeout(() => { tcBottom.classList.add('visible'); }, 2900);
+      later(() => { ['p1-b','p2-b','p3-b','p4-b','p5-b','p6-b'].forEach(showThread); }, 2600);
+      later(() => { tcBottom.classList.add('visible'); }, 2900);
     }
   }
 
   if (step === 3) {
-    // Hide root and problem cards, keep tc-bottom visible, move it to centre hub
+    // Hide tree (forward from step 2) and hub (backward from step 4)
     ['tc-root','tc-p1','tc-p2','tc-p3','tc-p4','tc-p5','tc-p6']
       .forEach(id => document.getElementById(id).classList.remove('visible'));
-    ['r-p1','r-p2','r-p3','r-p4','r-p5','r-p6',
-     'p1-b','p2-b','p3-b','p4-b','p5-b','p6-b'].forEach(hideThread);
-
-    cardImgMain.classList.remove('visible');
-    tcBottom.classList.add('visible');
-    tcBottom.classList.add('state-hub');
-    tcBottom.style.left = '412px'; tcBottom.style.top  = '232px';
-    tcBottom.style.width = '175px'; tcBottom.style.height = '175px';
-
-    setTimeout(() => { solCards.forEach(c => c.classList.add('visible')); }, 700);
+    treeThreads.forEach(hideThread);
+    hideSol();
+    tcBottom.classList.remove('visible', 'state-hub');
+    tcBottom.style.left = '355px'; tcBottom.style.top = '430px';
+    tcBottom.style.width = '290px'; tcBottom.style.height = '60px';
+    cardVideoMain.classList.remove('visible');
+    cardChartLeft.classList.remove('visible');
+    cardImgRightS5.classList.remove('visible');
+    cardImgRight.classList.remove('visible');
+    mainVideo.pause();
+    cardVideoMain.style.left = ''; cardVideoMain.style.top = ''; cardVideoMain.style.width = ''; cardVideoMain.style.height = '';
+    later(() => { cardImgMain.classList.add('visible'); }, 300);
   }
 
   if (step === 4) {
-    // Hide sol cards and tc-bottom, keep card-t1 header, show big image card
-    hideSol();
-    tcBottom.classList.remove('visible');
+    // Solutions hub — hide image (from step 3) and video (backward from step 5)
+    cardImgMain.classList.remove('visible');
     cardVideoMain.classList.remove('visible');
+    cardChartLeft.classList.remove('visible');
+    cardImgRightS5.classList.remove('visible');
+    cardImgRight.classList.remove('visible');
     mainVideo.pause();
-    setTimeout(() => { cardImgMain.classList.add('visible'); }, 300);
+    cardVideoMain.style.left = ''; cardVideoMain.style.top = ''; cardVideoMain.style.width = ''; cardVideoMain.style.height = '';
+    tcBottom.classList.add('visible', 'state-hub');
+    tcBottom.style.left = '412px'; tcBottom.style.top  = '232px';
+    tcBottom.style.width = '175px'; tcBottom.style.height = '175px';
+    later(() => { solCards.forEach(c => c.classList.add('visible')); }, 700);
   }
 
   if (step === 5) {
-    // Swap image card for video card
     cardImgMain.classList.remove('visible');
     hideSol();
     tcBottom.classList.remove('visible');
-    setTimeout(() => {
+    cardChartLeft.classList.remove('visible');
+    cardImgRight.classList.remove('visible');
+    cardImgRightS5.classList.remove('visible');
+    // Reset video to centre full size
+    cardVideoMain.style.left = '180px'; cardVideoMain.style.top = '100px'; cardVideoMain.style.width = '640px'; cardVideoMain.style.height = '430px';
+
+    later(() => {
       cardVideoMain.classList.add('visible');
       mainVideo.currentTime = 0;
       mainVideo.play();
     }, 300);
+
+    // After 5s: video slides right to match chart size and row, chart appears left
+    later(() => {
+      cardVideoMain.style.left = '512px';
+      cardVideoMain.style.top = '147px';
+      cardVideoMain.style.width = '456px';
+      cardVideoMain.style.height = '346px';
+      cardChartLeft.classList.add('visible');
+    }, 5300);
   }
+
+  if (step === 6) {
+    cardImgMain.classList.remove('visible');
+    hideSol();
+    hideMC();
+    tcBottom.classList.remove('visible');
+    cardChartLeft.classList.add('visible');
+    cardVideoMain.classList.remove('visible');
+    mainVideo.pause();
+    cardVideoMain.style.left = ''; cardVideoMain.style.top = ''; cardVideoMain.style.width = ''; cardVideoMain.style.height = '';
+    cardImgRightS5.classList.remove('visible');
+    cardImgRight.classList.add('visible');
+
+    // After 5s: 4.png swaps for 7.png
+    later(() => {
+      cardImgRight.classList.remove('visible');
+      cardImgRightS5.classList.add('visible');
+    }, 5000);
+  }
+
+  if (step === 7) {
+    cardImgMain.classList.remove('visible');
+    cardChartLeft.classList.remove('visible');
+    cardImgRight.classList.remove('visible');
+    cardImgRightS5.classList.remove('visible');
+    mainVideo.pause();
+    hideSol();
+    hideTod();
+    tcBottom.classList.remove('visible');
+
+    // Reset mc-root to centre, hide factors and threads
+    mcRoot.style.top = '275px';
+    mcRoot.classList.remove('visible');
+    mcFactors.forEach(c => c.classList.remove('visible'));
+    mcThreadNames.forEach(hideThread);
+
+    later(() => { mcRoot.classList.add('visible'); }, 300);
+    later(() => { mcRoot.style.top = '150px'; }, 3300);
+    later(() => {
+      mcFactors.forEach(c => c.classList.add('visible'));
+      mcThreadNames.forEach(showThread);
+    }, 3800);
+  }
+
+  if (step === 8) {
+    hideMC();
+    tcBottom.classList.remove('visible');
+    cardImgMain.classList.remove('visible');
+    cardChartLeft.classList.remove('visible');
+    cardImgRight.classList.remove('visible');
+    cardImgRightS5.classList.remove('visible');
+    mainVideo.pause();
+
+    // Reset to compact initial state before showing
+    cardTod.classList.remove('expanded', 'visible');
+
+    later(() => { cardTod.classList.add('visible'); }, 300);
+    later(() => { cardTod.classList.add('expanded'); }, 3300);
+  }
+
 }
 
 document.getElementById('btn-next').addEventListener('click', () => applyStep(step+1));
 document.getElementById('btn-prev').addEventListener('click', () => applyStep(step-1));
 document.addEventListener('keydown', e => {
+  if (document.activeElement.tagName === 'BUTTON') document.activeElement.blur();
   if (e.key==='ArrowRight'||e.key===' ') { e.preventDefault(); applyStep(step+1); }
   if (e.key==='ArrowLeft')               { e.preventDefault(); applyStep(step-1); }
 });

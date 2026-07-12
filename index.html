@@ -911,6 +911,7 @@ function applyStep(s) {
     cardImgRight.classList.remove('visible');
     mainVideo.pause();
     cardVideoMain.style.left = ''; cardVideoMain.style.top = ''; cardVideoMain.style.width = ''; cardVideoMain.style.height = '';
+    hideMC();
     tcBottom.classList.add('visible', 'state-hub');
     tcBottom.style.left = '412px'; tcBottom.style.top  = '232px';
     tcBottom.style.width = '175px'; tcBottom.style.height = '175px';
@@ -918,8 +919,37 @@ function applyStep(s) {
   }
 
   if (step === 5) {
+    // Mode Choice Behavior
+    cardImgMain.classList.remove('visible');
+    cardChartLeft.classList.remove('visible');
+    cardImgRight.classList.remove('visible');
+    cardImgRightS5.classList.remove('visible');
+    cardVideoMain.classList.remove('visible');
+    mainVideo.pause();
+    cardVideoMain.style.left = ''; cardVideoMain.style.top = ''; cardVideoMain.style.width = ''; cardVideoMain.style.height = '';
+    hideSol();
+    hideTod();
+    tcBottom.classList.remove('visible');
+
+    // Reset mc-root to centre, hide factors and threads
+    mcRoot.style.top = '275px';
+    mcRoot.classList.remove('visible');
+    mcFactors.forEach(c => c.classList.remove('visible'));
+    mcThreadNames.forEach(hideThread);
+
+    later(() => { mcRoot.classList.add('visible'); }, 300);
+    later(() => { mcRoot.style.top = '150px'; }, 3300);
+    later(() => {
+      mcFactors.forEach(c => c.classList.add('visible'));
+      mcThreadNames.forEach(showThread);
+    }, 3800);
+  }
+
+  if (step === 6) {
+    // Video + chart
     cardImgMain.classList.remove('visible');
     hideSol();
+    hideMC();
     tcBottom.classList.remove('visible');
     cardChartLeft.classList.remove('visible');
     cardImgRight.classList.remove('visible');
@@ -943,10 +973,12 @@ function applyStep(s) {
     }, 5300);
   }
 
-  if (step === 6) {
+  if (step === 7) {
+    // Image swap (4.png → 7.png)
     cardImgMain.classList.remove('visible');
     hideSol();
     hideMC();
+    hideTod();
     tcBottom.classList.remove('visible');
     cardChartLeft.classList.add('visible');
     cardVideoMain.classList.remove('visible');
@@ -960,30 +992,6 @@ function applyStep(s) {
       cardImgRight.classList.remove('visible');
       cardImgRightS5.classList.add('visible');
     }, 5000);
-  }
-
-  if (step === 7) {
-    cardImgMain.classList.remove('visible');
-    cardChartLeft.classList.remove('visible');
-    cardImgRight.classList.remove('visible');
-    cardImgRightS5.classList.remove('visible');
-    mainVideo.pause();
-    hideSol();
-    hideTod();
-    tcBottom.classList.remove('visible');
-
-    // Reset mc-root to centre, hide factors and threads
-    mcRoot.style.top = '275px';
-    mcRoot.classList.remove('visible');
-    mcFactors.forEach(c => c.classList.remove('visible'));
-    mcThreadNames.forEach(hideThread);
-
-    later(() => { mcRoot.classList.add('visible'); }, 300);
-    later(() => { mcRoot.style.top = '150px'; }, 3300);
-    later(() => {
-      mcFactors.forEach(c => c.classList.add('visible'));
-      mcThreadNames.forEach(showThread);
-    }, 3800);
   }
 
   if (step === 8) {
